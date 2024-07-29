@@ -1,4 +1,13 @@
 {
+  "users": [
+    {
+      "email": "mohamedelzefzafy@gmail.com",
+      "password": "$2a$10$csjWODpsixeqKW18KIi.7u3q0TLS1bTRddeA2rEOXfSUOF57qT342",
+      "firstName": "‪mohamed",
+      "lastName": "elzefzafy‬‏",
+      "id": 1
+    }
+  ],
   "category": [
     {
       "id": 1,
@@ -97,5 +106,11 @@
       "max": 2
     }
   ],
-  "wishlist": []
+  "wishlist": [
+    {
+      "userId": "1",
+      "productId": 1,
+      "id": 1
+    }
+  ]
 }

@@ -11,8 +11,8 @@ const {loading , error , records} = useCategories();
 
 <>
 <Heading title="Categories"/>
-  <Loading LoadingStatus={loading} error={error}>
-    <GridList records={records} renderItem={(records) => <Categories {...records}/>}/>
+  <Loading LoadingStatus={loading} error={error} type="category">
+    <GridList records={records} renderItem={(records) => <Categories {...records}/>} message="there are no categories"/>
   
   
   

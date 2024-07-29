@@ -13,18 +13,20 @@ const RegisterPage = lazy(() => import('@pages/RegisterPage'));
 
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import LottieHandler from '@components/feedBack/lottieHandler/LottieHandler';
+import SuspenceLazyLoading from '@components/feedBack/suspenseLazyLoading/SuspenceLazyLoading';
 
 const AppRouer = () => {
   const router = createBrowserRouter([
     {path : "/" ,
-       element : <MainLayout/>,
+       element :<SuspenceLazyLoading> <MainLayout/></SuspenceLazyLoading>,
        errorElement : <ErrorPage/>,
       children :[
-        {index : true , element : <Suspense fallback="Loading... please wait"><HomePage/></Suspense>},
-        {path : "cart" , element :   <Suspense fallback="Loading... please wait"><CartPage/></Suspense>},
-        {path : "Wishlist" , element : <Suspense fallback="Loading... please wait"><WishlistPage/></Suspense>},
-        {path : "categories" , element : <Suspense fallback="Loading... please wait"><CategoriesPage/></Suspense>},
-        {path : "categories/products/:prefix" , element :   <Suspense fallback="Loading... please wait"><ProductsPage/></Suspense> ,
+        {index : true , element :<SuspenceLazyLoading> <HomePage/> </SuspenceLazyLoading>},
+        {path : "cart" , element :  <SuspenceLazyLoading> <CartPage/> </SuspenceLazyLoading>},
+        {path : "Wishlist" , element : <SuspenceLazyLoading> <WishlistPage/> </SuspenceLazyLoading>},
+        {path : "categories" , element :<SuspenceLazyLoading> <CategoriesPage/> </SuspenceLazyLoading>},
+        {path : "categories/products/:prefix" , element :   <SuspenceLazyLoading> <ProductsPage/> </SuspenceLazyLoading> ,
 
           loader : ({params}) => {
             if ( typeof params.prefix !== "string" || !/^[a-z]+$/i.test(params.prefix)) {
@@ -38,9 +40,9 @@ const AppRouer = () => {
 return true;
           }
         },
-        {path : "about-us" , element :  <Suspense fallback="Loading... please wait"><AboutUsPage/></Suspense>},
-        {path : "register" , element : <Suspense fallback="Loading... please wait"><RegisterPage/> </Suspense>},
-        {path : "login" , element : <Suspense fallback="Loading... please wait"><LoginPage/> </Suspense>},
+        {path : "about-us" , element :  <SuspenceLazyLoading> <AboutUsPage/> </SuspenceLazyLoading>},
+        {path : "register" , element :  <SuspenceLazyLoading> <RegisterPage/> </SuspenceLazyLoading>},
+        {path : "login" , element :  <SuspenceLazyLoading> <LoginPage/> </SuspenceLazyLoading>},
 
     ]},
   ])

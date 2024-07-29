@@ -10,21 +10,14 @@ const WishlistPage = () => {
   const {loading , error , records} = useWishlist();
   return (
     <>
-{records.length ? 
-(
-<>
 <Heading title="Your Wishlist"/>
-  <Loading LoadingStatus={loading} error={error}>
+  <Loading LoadingStatus={loading} error={error} type="wishlist">
     <GridList
+    message="Wishlist is Empty"
       records={records}
       renderItem={(record) => <Products {...record} />}
     />
   </Loading>
-</>
-)
-:
-(<Heading title="Your Wishlist is Empty"/>)
-}
     </>
   )
 }

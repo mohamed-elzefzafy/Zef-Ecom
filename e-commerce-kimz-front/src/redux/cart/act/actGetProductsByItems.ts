@@ -8,7 +8,7 @@ import AxiosErrorHandler from "@utils/isAxiosErrorHandler";
 export type TResponse =  TProduct[];
 
 const actGetProductsByItems = createAsyncThunk("cart/actGetProductsByAction" , async(_,thunkApi) => {
-const {rejectWithValue , fulfillWithValue , getState} = thunkApi;
+const {rejectWithValue , fulfillWithValue , getState , signal} = thunkApi;
 const {cart} = getState() as RootState;
 const itemsId = Object.keys(cart.items);
 
@@ -19,7 +19,7 @@ return fulfillWithValue([]);
 try {
   const concatenetedItemsIds = itemsId.map(itemId => `id=${itemId}`).join("&");
 console.log(concatenetedItemsIds);
-  const response = await request.get<TResponse>(`/products?${concatenetedItemsIds}`);
+  const response = await request.get<TResponse>(`/products?${concatenetedItemsIds}` , {signal});
   return response.data;
 } catch (error) {
 return rejectWithValue(AxiosErrorHandler(error));

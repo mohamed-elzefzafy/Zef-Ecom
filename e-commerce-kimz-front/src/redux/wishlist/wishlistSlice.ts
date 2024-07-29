@@ -3,6 +3,7 @@ import actLikeToggle from './act/actLikeToggle';
 import { TLoading } from "src/types/shared";
 import actGetWishlist from './act/actGetWishlist';
 import { TProduct } from "src/types/product";
+import { isString } from "src/types/guards";
  
 export interface IWishlist {
   itemsId : number[];
@@ -37,7 +38,7 @@ const wishlistSlice = createSlice({
       }
     });
     builder.addCase(actLikeToggle.rejected , (state , action) => {
-      if (action.payload && typeof action.payload === "string") {
+      if (isString(action.payload)) {
         state.error = action.payload
       }
     });
@@ -53,7 +54,7 @@ const wishlistSlice = createSlice({
     });
     builder.addCase(actGetWishlist.rejected , (state , action) => {
       state.loading = "failed";
-      if (action.payload && typeof action.payload === "string") {
+      if (isString(action.payload)) {
         state.error = action.payload
       }
     });

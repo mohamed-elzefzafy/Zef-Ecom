@@ -8,10 +8,10 @@ export const useWishlist = () => {
   const {productsFullInfo , loading , error} = useAppSelector(state => state.wishlist);
   const items = useAppSelector(state => state.cart.items);
   useEffect(()=>{
-    dispatch(actGetWishlist());
+  const response =  dispatch(actGetWishlist());
     return () => {
-      dispatch(productWithListCleanUp())
-    }
+      dispatch(productWithListCleanUp());
+      response.abort();    }
   },[dispatch]);
 
   console.log(productsFullInfo);

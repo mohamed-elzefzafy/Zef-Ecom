@@ -10,9 +10,10 @@ console.log(productsFullInfo);
 
 
   useEffect(()=>{
-    dispatch(actGetProductsByItems());
+  const promise =  dispatch(actGetProductsByItems());
     return () => {
       dispatch(productsCartCleanUp());
+      promise.abort();
     }
   },[dispatch]);
   

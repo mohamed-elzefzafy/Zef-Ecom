@@ -14,13 +14,14 @@ export type TResponse = TProduct[];
 
 
 const actGetWishlist = createAsyncThunk("wishlist/actGetWishlist" , async(_,thunkApi) => {
-const {rejectWithValue , fulfillWithValue } = thunkApi;
+const {rejectWithValue , fulfillWithValue , signal} = thunkApi;
 
 
 try {
-  const userWishlist = await request.get<{productId : number}[]>(`/wishlist?userId=1`);
-  if (!userWishlist.data.length) {
- fulfillWithValue([]);
+  const userWishlist = await request.get<{productId : number}[]>(`/wishlist?userId=1` , {signal});
+
+  if (userWishlist.data.length < 1) {
+return fulfillWithValue([]);
   }
 
 const concatenetedItemsIds = userWishlist.data.map(el => `id=${el.productId}`).join("&");

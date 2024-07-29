@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import actGetCategories, { TResponse } from "./act/actGetCategories";
 import { TCategory } from "src/types/category";
 import { TLoading } from "src/types/shared";
+import { isString } from "src/types/guards";
 
 
 
@@ -37,7 +38,7 @@ const categoriesSlice = createSlice({
     });
     builder.addCase(actGetCategories.rejected , (state , action) => {
       state.loading = "failed";
-      if (action.payload && typeof action.payload === "string") {
+      if (isString(action.payload)) {
         state.error = action.payload;
       }
     });

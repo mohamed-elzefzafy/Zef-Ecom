@@ -10,10 +10,11 @@ const {productParam , loading , error , productsFullInfo} = useProducts();
   return (
     <>
       <Heading title={`${productParam} Products`}></Heading>
-      <Loading LoadingStatus={loading} error={error}>
+      <Loading LoadingStatus={loading} error={error} type="product">
         <GridList
+        message="there are no Products"
           records={productsFullInfo}
-          renderItem={(record) => <Products {...record} />}
+          renderItem={(record) => <Products {...record}/>}
         />
       </Loading>
     </>
