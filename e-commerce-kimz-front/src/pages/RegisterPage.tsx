@@ -1,55 +1,21 @@
 import Heading from "@components/common/heading/Heading"
 import Input from "@components/form/input/Input"
-import { zodResolver } from "@hookform/resolvers/zod"
-import useCheckEmailAvaliability from "@hooks/useCheckEmailAvaliability"
-import { registerSchema, TRegisterInputs } from "@validations/registerSchema"
-import { FocusEvent, useEffect } from "react"
+import { useRegister } from "@hooks/useRegister"
 import { Button, Col, Form, Row, Spinner } from "react-bootstrap"
-import { SubmitHandler, useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
-import { actAuthRegister, resetUi } from "src/redux/auth/authSlice"
-import { useAppDispatch, useAppSelector } from "src/redux/hooks"
+import { Navigate } from "react-router-dom"
+
 
 
 
 
 const RegisterPage = () => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const {loading , error} = useAppSelector(state => state.auth)
-  const {checkEmailAvaliability , enterdEmail ,emailAvaliabilityStatus , resetCheckEmailAvaliability} 
-  = useCheckEmailAvaliability()
-  const {register , handleSubmit , trigger , getFieldState , formState : {errors}} = 
-  useForm<TRegisterInputs>({mode : "onBlur" , resolver : zodResolver(registerSchema)});
+const {accessToken , handleSubmit , submitForm , errors , register,
+  emailAvaliabilityStatus,emailOnBlurHandler,loading,error} = useRegister();
 
-  const submitForm : SubmitHandler<TRegisterInputs> = (data) => {
-const {firstName , lastName ,email ,password} = data;
-dispatch(actAuthRegister({firstName , lastName ,email ,password}))
-.unwrap().then(() => navigate("/login?message=account_created"));
+  if (accessToken) {
 
-
+    return   <Navigate to={"/"}/>
   }
-
-  const emailOnBlurHandler = async(e : FocusEvent<HTMLInputElement>) =>{
-await  trigger("email");
-const value = e.target.value;
-    const {isDirty , invalid} = getFieldState("email");
-    console.log(isDirty , invalid);
-    if (isDirty && !invalid && enterdEmail !== value) { 
-      checkEmailAvaliability(value);
-    }
-
-    if ( isDirty && invalid && enterdEmail ) {
-      resetCheckEmailAvaliability();
-    }
-    
-  }
-
-  useEffect(() =>{
-    return () => {
-      dispatch(resetUi());
-    }
-   },[dispatch]);
   return (
 <Row  className="justify-content-center">
   <Col xs={12} md={6}>

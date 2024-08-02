@@ -6,33 +6,43 @@ import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, R
 import storage from "redux-persist/lib/storage";
 import wishlist from "./wishlist/wishlistSlice";
 import auth from "./auth/authSlice";
+import orders from "./orders/orderSlice";
 
 
 
+const rootPersistConfig = {
+  key : "root",
+  storage,
+  whiteList: ["cart" , "auth"]
+}
 
 const cartPersistConfig = {
   key : "cart",
   storage,
   whiteList: ["items"]
 }
-const wishListPersistConfig = {
-  key : "wishlist",
+const authPersistConfig = {
+  key : "auth",
   storage,
-  whiteList: ["itemsId"]
+  whiteList: ["user" , "accessToken"]
 }
 
 const rootReducer = combineReducers( {
   categories ,
   products ,
-  auth,
-  wishlist :persistReducer(wishListPersistConfig , wishlist),
+  auth : persistReducer(authPersistConfig , auth),
+  wishlist ,
+  orders ,
   cart : persistReducer(cartPersistConfig , cart),
+  
 })
 
 
+const persistedReducer = persistReducer(rootPersistConfig , rootReducer);
+
 
  const store = configureStore({
-  reducer : rootReducer,
+  reducer : persistedReducer,
   middleware : (getDefauitMiddleWare) => 
     getDefauitMiddleWare({
     serializableCheck : {
@@ -48,3 +58,5 @@ export { store, persistor};
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+

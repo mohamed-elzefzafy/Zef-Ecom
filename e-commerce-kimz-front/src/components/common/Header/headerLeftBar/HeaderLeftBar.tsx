@@ -9,9 +9,10 @@ const {  headerLeftBar} = styles;
 const HeaderLeftBar = () => {
   const totalQuantity = useAppSelector(getCartTotalQuantitySelector);
   const wishlistItemId = useAppSelector(state => state.wishlist.itemsId);
+  
   return (
     <div className={headerLeftBar}>
-    <HeaderCounter to="/Wishlist" totalQuantity={wishlistItemId.length} svgIcon={<LogoWithList/>} title={"Wishlist"}/>
+    <HeaderCounter to="/Wishlist" totalQuantity={wishlistItemId?.length} svgIcon={<LogoWithList/>} title={"Wishlist"}/>
     <HeaderCounter to="/cart" totalQuantity={totalQuantity} svgIcon={<Logo title="Cart"/>} title={"Cart"}/>
 
     </div>

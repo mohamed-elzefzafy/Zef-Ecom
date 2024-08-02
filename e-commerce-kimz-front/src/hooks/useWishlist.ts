@@ -8,7 +8,7 @@ export const useWishlist = () => {
   const {productsFullInfo , loading , error} = useAppSelector(state => state.wishlist);
   const items = useAppSelector(state => state.cart.items);
   useEffect(()=>{
-  const response =  dispatch(actGetWishlist());
+  const response =  dispatch(actGetWishlist("productsFullInfo"));
     return () => {
       dispatch(productWithListCleanUp());
       response.abort();    }
@@ -20,6 +20,7 @@ export const useWishlist = () => {
     {...record , 
       quantity : items[record.id],
       isLiked : true,
+      isAuthenticated : true,
     }
   ))
 

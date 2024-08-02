@@ -11,6 +11,7 @@ export const useProducts = () => {
   const { records, loading, error } = useAppSelector((state) => state.products);
   const items = useAppSelector((state) => state.cart.items);
   const wishlistItemId = useAppSelector((state) => state.wishlist.itemsId);
+  const userAccessToken = useAppSelector((state) => state.auth.accessToken);
 
   useEffect(() => {
   const response =   dispatch(actGetProductsByCatPrefix(param.prefix as string));
@@ -23,10 +24,11 @@ export const useProducts = () => {
   const productsFullInfo = records.map((record) => ({
     ...record,
     quantity: items[record.id],
-    isLiked: wishlistItemId.includes(record.id),
+    isLiked: wishlistItemId?.includes(record.id),
+    isAuthenticated: userAccessToken ? true : false,
 
 
   }));
 
-  return {productParam , loading , error , productsFullInfo}
+  return {productParam , loading , error , productsFullInfo }
 }

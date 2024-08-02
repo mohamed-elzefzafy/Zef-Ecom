@@ -1,4 +1,4 @@
-import { Button, Spinner } from "react-bootstrap";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import styles from "./styles.module.css";
 import { TProduct } from "src/types/product";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
@@ -7,15 +7,17 @@ import {  memo, useEffect, useState } from "react";
 import Like from "@assets/svg/like.svg?react";
 import LikeFill from "@assets/svg/like-fill.svg?react";
 import { actLikeToggle } from "src/redux/wishlist/wishlistSlice";
+import ProductInfo from "../productInfo/ProductInfo";
 
-const {product , productImg , maximumNotice , wishlistBtn} =styles;
+const {  productImg , maximumNotice , wishlistBtn} =styles;
 
 
-const Products = memo(({id , img , title , price , max , isLiked} : TProduct) => {
+const Products = memo(({id , img , title , price , max , isLiked  , isAuthenticated} : TProduct) => {
   console.log("fire products component");
   
   const dispatch = useAppDispatch();
   const [isBtnDisabled, setIsBtnDisabled] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [isStopAddToCart, setIsStopAddToCart] = useState(false);
   const [loading, setLoading] = useState(false);
   const items = useAppSelector(state => state.cart.items);
@@ -49,26 +51,34 @@ setIsStopAddToCart(true);
 
 
   const likeToggleHandler = () => {
-    if (loading) return;
-    setLoading(true);
-    dispatch(actLikeToggle(id)).unwrap().then(() => setLoading(false));
-    
+if (isAuthenticated) {
+  if (loading) return;
+  setLoading(true);
+  dispatch(actLikeToggle(id)).unwrap().then(() => setLoading(false));
+  
+}else {
+  setShowModal(true);
+}
   }
   return (
-    <div className={product}>
+<>
+<Modal show={showModal} onHide={() => setShowModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Login Required</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            You need to login first to add this item to your wishlist.
+          </Modal.Body>
+        </Modal>
+
+<ProductInfo title={title} img={img} price={price} direction="row">
+<div >
       <div className={wishlistBtn} onClick={likeToggleHandler}>
       {loading ? <Spinner size="sm" animation="border" variant="danger"/> : isLiked ? <LikeFill/> : <Like/>}
       </div>
-    <div className={productImg}>
-      <img
-        src={img}
-        alt={title}
-      />
-    </div>
-    <h2>{title}</h2>
-    <h3>{price} EGP</h3>
+  
     <p className={maximumNotice}>{isStopAddToCart ? "You reached to the limit" : ""}</p>
-    <Button variant="info" style={{ color: "white" }} onClick={addToCartHAndler} disabled={isBtnDisabled || isStopAddToCart}>
+    <Button variant="info" style={{ color: "white"  , width :"100%"}} onClick={addToCartHAndler} disabled={isBtnDisabled || isStopAddToCart}>
       {isBtnDisabled ? <>
         <Spinner size="sm" animation="border"/> Loading...
       </> : 
@@ -76,6 +86,9 @@ setIsStopAddToCart(true);
       
     </Button>
   </div>
+</ProductInfo>
+
+</>
   )
 })
 

@@ -1,40 +1,19 @@
 import Heading from "@components/common/heading/Heading"
 import Input from "@components/form/input/Input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import useCheckEmailAvaliability from "@hooks/useCheckEmailAvaliability";
-import { loginSchema, TLoginInputs } from "@validations/loginSchema";
-import { useEffect } from "react";
+import { useLogin } from "@hooks/useLogin";
 import { Alert, Button, Col, Form, Row, Spinner } from "react-bootstrap"
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { actAuthLogin, resetUi } from "src/redux/auth/authSlice";
-import { useAppDispatch, useAppSelector } from "src/redux/hooks";
+import { Navigate } from "react-router-dom";
+
 
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const [searchParams , setSearchParams] = useSearchParams();
-  const {checkEmailAvaliability , enterdEmail ,emailAvaliabilityStatus , resetCheckEmailAvaliability} 
-  = useCheckEmailAvaliability()
+const {accessToken , searchParams ,handleSubmit , submitForm , errors,
+  register , emailAvaliabilityStatus ,loading , error} = useLogin();
 
+if (accessToken) {
 
-
-  const {loading , error} = useAppSelector(state => state.auth)
-  const {register , handleSubmit , formState : {errors}} = 
-  useForm<TLoginInputs>({mode : "onBlur" , resolver : zodResolver(loginSchema)});
-
-  const submitForm : SubmitHandler<TLoginInputs> = (data) => {
-    if (searchParams.get("message") === "account_created" ) navigate("/login");
-    const {email , password} = data;
-  dispatch(actAuthLogin({email , password})).unwrap().then(() => navigate("/"));
-  }
-
-  useEffect(() =>{
-    return () => {
-      dispatch(resetUi());
-    }
-   },[dispatch]);
+  return   <Navigate to={"/"}/>
+}
   return (
 <Row  className="justify-content-center">
   <Col xs={12} md={6}>
@@ -43,6 +22,10 @@ const LoginPage = () => {
   {searchParams.get("message") === "account_created"  &&   
   
   <Alert variant="success">Your account successfully created, please login</Alert>
+  }
+  {searchParams.get("message") === "login_required"  &&   
+  
+  <Alert variant="danger">Login first then access this page</Alert>
   }
   <Form onSubmit={handleSubmit(submitForm)}>
 
